@@ -1,0 +1,799 @@
+/* ==============================================================================
+   SIM-MARKET ENTERPRISE - MODERN DESIGN SYSTEM & STYLES
+   Multi-Theme Architecture with CSS Custom Properties
+   ============================================================================== */
+
+/* ==========================================================================
+   THEME VARIABLE DEFINITIONS
+   ========================================================================== */
+
+/* TEMA 1: PUTIH / LIGHT CLEAN MODERN (DEFAULT) */
+:root,
+html[data-theme="light"] {
+    --bg-base: #f1f5f9;
+    --bg-gradient-start: #e2e8f0;
+    --bg-gradient-end: #f1f5f9;
+    --bg-surface: rgba(255, 255, 255, 0.72);
+    --bg-surface-solid: #ffffff;
+    --bg-input: #f8fafc;
+    --bg-input-deep: #f1f5f9;
+    --bg-sidebar-footer: rgba(241, 245, 249, 0.6);
+    --bg-table-head: rgba(241, 245, 249, 0.8);
+    --bg-table-stripe: rgba(248, 250, 252, 0.5);
+    --bg-badge: #f1f5f9;
+    --bg-avatar: #6366f1;
+    --bg-dropdown: #ffffff;
+    --bg-modal-overlay: rgba(0, 0, 0, 0.4);
+    --bg-toast: #ffffff;
+    --bg-scrollbar-track: #e2e8f0;
+    --bg-scrollbar-thumb: #94a3b8;
+    --bg-scrollbar-thumb-hover: #64748b;
+    --bg-user-card: rgba(241, 245, 249, 0.7);
+    --bg-hover-btn: rgba(148, 163, 184, 0.15);
+
+    --border-main: rgba(0, 0, 0, 0.08);
+    --border-input: #cbd5e1;
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --border-divider: rgba(203, 213, 225, 0.5);
+    --border-table: rgba(203, 213, 225, 0.4);
+    --border-card: rgba(0, 0, 0, 0.05);
+
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-tertiary: #64748b;
+    --text-muted: #94a3b8;
+    --text-inverse: #ffffff;
+    --text-heading: #1e293b;
+    --text-nav: #475569;
+    --text-nav-hover: #1e293b;
+    --text-label: #64748b;
+    --text-input: #1e293b;
+    --text-table-head: #64748b;
+    --text-table-body: #334155;
+    --text-version: #94a3b8;
+
+    --glass-blur: blur(20px);
+    --shadow-panel: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-dropdown: 0 10px 40px rgba(0,0,0,0.08);
+    --glow-cyan-focus: 0 0 12px rgba(6, 182, 212, 0.2);
+    --glow-amber-focus: 0 0 12px rgba(245, 158, 11, 0.2);
+
+    --watermark-bg: rgba(241, 245, 249, 0.8);
+    --watermark-text: #94a3b8;
+    --watermark-border: #e2e8f0;
+
+    --accent-gradient-from: #06b6d4;
+    --accent-gradient-to: #6366f1;
+    --select-option-bg: #ffffff;
+    --select-option-text: #1e293b;
+}
+
+/* TEMA 2: HIJAU / EMERALD ECO FRESH */
+html[data-theme="green"] {
+    --bg-base: #022c22;
+    --bg-gradient-start: #042f2e;
+    --bg-gradient-end: #022c22;
+    --bg-surface: rgba(6, 78, 59, 0.45);
+    --bg-surface-solid: #064e3b;
+    --bg-input: #022c22;
+    --bg-input-deep: #022c22;
+    --bg-sidebar-footer: rgba(6, 50, 38, 0.6);
+    --bg-table-head: rgba(6, 78, 59, 0.5);
+    --bg-table-stripe: rgba(6, 78, 59, 0.2);
+    --bg-badge: #064e3b;
+    --bg-avatar: #059669;
+    --bg-dropdown: #064e3b;
+    --bg-modal-overlay: rgba(0, 0, 0, 0.7);
+    --bg-toast: #064e3b;
+    --bg-scrollbar-track: #022c22;
+    --bg-scrollbar-thumb: #065f46;
+    --bg-scrollbar-thumb-hover: #047857;
+    --bg-user-card: rgba(6, 78, 59, 0.4);
+    --bg-hover-btn: rgba(16, 185, 129, 0.12);
+
+    --border-main: rgba(16, 185, 129, 0.12);
+    --border-input: #065f46;
+    --border-subtle: rgba(16, 185, 129, 0.08);
+    --border-divider: rgba(6, 95, 70, 0.5);
+    --border-table: rgba(6, 95, 70, 0.4);
+    --border-card: rgba(16, 185, 129, 0.1);
+
+    --text-primary: #ecfdf5;
+    --text-secondary: #a7f3d0;
+    --text-tertiary: #6ee7b7;
+    --text-muted: #34d399;
+    --text-inverse: #022c22;
+    --text-heading: #f0fdf4;
+    --text-nav: #6ee7b7;
+    --text-nav-hover: #ecfdf5;
+    --text-label: #6ee7b7;
+    --text-input: #ecfdf5;
+    --text-table-head: #6ee7b7;
+    --text-table-body: #a7f3d0;
+    --text-version: #34d399;
+
+    --glass-blur: blur(20px);
+    --shadow-panel: 0 2px 8px rgba(0,0,0,0.25);
+    --shadow-dropdown: 0 10px 40px rgba(0,0,0,0.35);
+    --glow-cyan-focus: 0 0 15px rgba(16, 185, 129, 0.35);
+    --glow-amber-focus: 0 0 15px rgba(245, 158, 11, 0.25);
+
+    --watermark-bg: rgba(6, 78, 59, 0.6);
+    --watermark-text: #6ee7b7;
+    --watermark-border: #065f46;
+
+    --accent-gradient-from: #10b981;
+    --accent-gradient-to: #059669;
+    --select-option-bg: #064e3b;
+    --select-option-text: #ecfdf5;
+}
+
+/* TEMA 3: HITAM / DARK ENTERPRISE (EXISTING DESIGN) */
+html[data-theme="dark"] {
+    --bg-base: #020617;
+    --bg-gradient-start: #0f172a;
+    --bg-gradient-end: #020617;
+    --bg-surface: rgba(15, 23, 42, 0.65);
+    --bg-surface-solid: #0f172a;
+    --bg-input: #020617;
+    --bg-input-deep: #020617;
+    --bg-sidebar-footer: rgba(2, 6, 23, 0.4);
+    --bg-table-head: rgba(15, 23, 42, 0.6);
+    --bg-table-stripe: rgba(15, 23, 42, 0.2);
+    --bg-badge: #0f172a;
+    --bg-avatar: #4f46e5;
+    --bg-dropdown: #0f172a;
+    --bg-modal-overlay: rgba(0, 0, 0, 0.75);
+    --bg-toast: #0f172a;
+    --bg-scrollbar-track: #020617;
+    --bg-scrollbar-thumb: #334155;
+    --bg-scrollbar-thumb-hover: #475569;
+    --bg-user-card: rgba(15, 23, 42, 0.5);
+    --bg-hover-btn: rgba(51, 65, 85, 0.5);
+
+    --border-main: rgba(255, 255, 255, 0.07);
+    --border-input: #1e293b;
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-divider: rgba(30, 41, 59, 0.6);
+    --border-table: rgba(30, 41, 59, 0.4);
+    --border-card: rgba(255, 255, 255, 0.05);
+
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #94a3b8;
+    --text-muted: #64748b;
+    --text-inverse: #020617;
+    --text-heading: #ffffff;
+    --text-nav: #94a3b8;
+    --text-nav-hover: #e2e8f0;
+    --text-label: #94a3b8;
+    --text-input: #ffffff;
+    --text-table-head: #94a3b8;
+    --text-table-body: #cbd5e1;
+    --text-version: #64748b;
+
+    --glass-blur: blur(20px);
+    --shadow-panel: 0 4px 12px rgba(0,0,0,0.3);
+    --shadow-dropdown: 0 10px 40px rgba(0,0,0,0.5);
+    --glow-cyan-focus: 0 0 15px rgba(34, 211, 238, 0.25);
+    --glow-amber-focus: 0 0 15px rgba(245, 158, 11, 0.25);
+
+    --watermark-bg: rgba(15, 23, 42, 0.6);
+    --watermark-text: #64748b;
+    --watermark-border: #1e293b;
+
+    --accent-gradient-from: #22d3ee;
+    --accent-gradient-to: #6366f1;
+    --select-option-bg: #0f172a;
+    --select-option-text: #ffffff;
+}
+
+/* ==========================================================================
+   BASE & GLOBAL THEME APPLICATION
+   ========================================================================== */
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    overflow-x: hidden;
+    color: var(--text-primary);
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* Global Theme Transition — applies to all elements for smooth theme switch */
+*,
+*::before,
+*::after {
+    transition-property: background-color, border-color, color, box-shadow, opacity;
+    transition-duration: 0.35s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Exclude elements that need their own transition timing */
+.smooth-transition,
+#sidebar,
+#sidebar *,
+#menu-overlay,
+#modal-tambah-produk,
+#modal-tambah-produk .modal-box {
+    transition-property: all;
+}
+
+.smooth-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   GLASS PANEL — THEMED
+   ========================================================================== */
+
+.glass-panel {
+    background: var(--bg-surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-main);
+    box-shadow: var(--shadow-panel);
+}
+
+/* ==========================================================================
+   GLOW FOCUS EFFECTS — THEMED
+   ========================================================================== */
+
+.glow-cyan:focus {
+    box-shadow: var(--glow-cyan-focus);
+}
+
+.glow-amber:focus {
+    box-shadow: var(--glow-amber-focus);
+}
+
+/* ==========================================================================
+   SIDEBAR NAVIGATION — THEMED
+   ========================================================================== */
+
+#sidebar {
+    width: 18rem;
+    min-width: 18rem;
+    transform: translateX(0);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease, background 0.5s ease;
+    overflow: hidden;
+}
+
+#sidebar.sidebar-hidden {
+    width: 4.5rem;
+    min-width: 4.5rem;
+    transform: translateX(calc(-100% + 4.5rem));
+    opacity: 0.98;
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+#sidebar .menu-section,
+#sidebar #sidebar-nav,
+#sidebar .sidebar-brand {
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+#sidebar.sidebar-hidden .sidebar-brand,
+#sidebar.sidebar-hidden .sidebar-body,
+#sidebar.sidebar-hidden .sidebar-footer {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#sidebar.sidebar-hidden .sidebar-body {
+    height: 0;
+    overflow: hidden;
+}
+
+#sidebar.sidebar-hidden #sidebar-nav,
+#sidebar.sidebar-hidden .sidebar-brand {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-12px);
+}
+
+#sidebar.sidebar-hidden .menu-section {
+    display: none;
+}
+
+#menu-overlay {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+#menu-overlay.active {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ==========================================================================
+   MODAL DIALOG STYLES
+   ========================================================================== */
+
+#modal-tambah-produk {
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+#modal-tambah-produk .modal-box {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+/* ==========================================================================
+   CUSTOM SCROLLBAR — THEMED
+   ========================================================================== */
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-scrollbar-thumb);
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--bg-scrollbar-thumb-hover);
+}
+
+/* ==========================================================================
+   KEYFRAMES & ANIMATIONS
+   ========================================================================== */
+
+@keyframes shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-8px);
+    }
+    75% {
+        transform: translateX(8px);
+    }
+}
+
+.animate-shake {
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* ==========================================================================
+   SETTING PAGE STYLES
+   ========================================================================== */
+
+.setting-card {
+    background: var(--bg-surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-main);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-panel);
+}
+
+.setting-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-divider);
+}
+
+.setting-card-header .icon-box {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.setting-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.setting-info-row:last-child {
+    border-bottom: none;
+}
+
+.setting-info-row .label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.setting-info-row .value {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Theme Picker Buttons */
+.theme-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.theme-btn {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.25rem 0.75rem;
+    border-radius: 1rem;
+    border: 2px solid var(--border-input);
+    background: var(--bg-input);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.theme-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.theme-btn.active {
+    border-color: var(--accent-gradient-from);
+    box-shadow: 0 0 20px rgba(var(--accent-gradient-from), 0.2), inset 0 0 0 1px var(--accent-gradient-from);
+}
+
+.theme-btn .theme-preview {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-btn .theme-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+}
+
+.theme-btn.active .theme-label {
+    color: var(--accent-gradient-from);
+}
+
+.theme-btn .check-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: #fff;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+.theme-btn.active .check-badge {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Theme preview color balls */
+.theme-preview-light {
+    background: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
+    border-color: #cbd5e1 !important;
+}
+
+.theme-preview-green {
+    background: linear-gradient(135deg, #064e3b 0%, #059669 100%);
+    border-color: #10b981 !important;
+}
+
+.theme-preview-dark {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-color: #334155 !important;
+}
+
+/* ==========================================================================
+   WATERMARK — THEMED
+   ========================================================================== */
+
+.app-watermark {
+    background: var(--watermark-bg);
+    border: 1px solid var(--watermark-border);
+    color: var(--watermark-text);
+}
+
+/* ==========================================================================
+   MEDIA PRINT RECEIPT CONFIGURATION
+   ========================================================================== */
+
+@media screen {
+    #print-receipt-area {
+        display: none !important;
+    }
+}
+
+@media print {
+
+    html,
+    body {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: auto !important;
+        height: auto !important;
+        display: block !important;
+    }
+
+    #login-screen,
+    #main-app,
+    #modal-tambah-produk,
+    #toast-container,
+    aside,
+    header,
+    nav {
+        display: none !important;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    #print-receipt-area,
+    #print-receipt-area * {
+        visibility: visible !important;
+        color: #000000 !important;
+    }
+
+    #print-receipt-area {
+        display: block !important;
+        position: relative !important;
+        width: 58mm !important;
+        max-width: 58mm !important;
+        margin: 0 auto !important;
+        padding: 6px 8px !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        font-size: 11px !important;
+        color: #000000 !important;
+        background: #ffffff !important;
+        line-height: 1.35 !important;
+        box-sizing: border-box !important;
+    }
+
+    @page {
+        size: 58mm auto;
+        margin: 0;
+    }
+}
+
+/* ==========================================================================
+   THEME-AWARE TAILWIND OVERRIDES
+   These apply themed colors to Tailwind utility classes used in the HTML.
+   ========================================================================== */
+
+/* Body background override for themed mode */
+html[data-theme="light"] body {
+    background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%) !important;
+}
+
+html[data-theme="green"] body {
+    background: linear-gradient(135deg, #042f2e 0%, #022c22 100%) !important;
+}
+
+html[data-theme="dark"] body {
+    background: linear-gradient(135deg, #0f172a 0%, #020617 100%) !important;
+}
+
+/* Light theme specific Tailwind color overrides */
+html[data-theme="light"] .text-slate-100,
+html[data-theme="light"] .text-white {
+    color: var(--text-primary) !important;
+}
+
+html[data-theme="light"] .text-slate-200 {
+    color: var(--text-secondary) !important;
+}
+
+html[data-theme="light"] .text-slate-300 {
+    color: var(--text-secondary) !important;
+}
+
+html[data-theme="light"] .text-slate-400 {
+    color: var(--text-tertiary) !important;
+}
+
+html[data-theme="light"] .text-slate-500 {
+    color: var(--text-muted) !important;
+}
+
+html[data-theme="light"] .bg-slate-950,
+html[data-theme="light"] .bg-slate-950\/50,
+html[data-theme="light"] .bg-slate-950\/60,
+html[data-theme="light"] .bg-slate-950\/20 {
+    background-color: var(--bg-input) !important;
+}
+
+html[data-theme="light"] .bg-slate-900,
+html[data-theme="light"] .bg-slate-900\/60,
+html[data-theme="light"] .bg-slate-900\/50,
+html[data-theme="light"] .bg-slate-900\/80 {
+    background-color: var(--bg-input-deep) !important;
+}
+
+html[data-theme="light"] .bg-\[\#020617\] {
+    background-color: var(--bg-base) !important;
+}
+
+html[data-theme="light"] .border-slate-800,
+html[data-theme="light"] .border-slate-800\/60,
+html[data-theme="light"] .border-slate-800\/50,
+html[data-theme="light"] .border-slate-800\/40,
+html[data-theme="light"] .border-slate-800\/80,
+html[data-theme="light"] .border-slate-700,
+html[data-theme="light"] .border-slate-700\/80 {
+    border-color: var(--border-input) !important;
+}
+
+html[data-theme="light"] .divide-slate-800\/40 > * + * {
+    border-color: var(--border-divider) !important;
+}
+
+html[data-theme="light"] .bg-slate-950\/40 {
+    background-color: var(--bg-sidebar-footer) !important;
+}
+
+html[data-theme="light"] select option {
+    background-color: var(--select-option-bg) !important;
+    color: var(--select-option-text) !important;
+}
+
+/* Green theme specific Tailwind color overrides */
+html[data-theme="green"] .text-slate-100,
+html[data-theme="green"] .text-white {
+    color: var(--text-primary) !important;
+}
+
+html[data-theme="green"] .text-slate-200 {
+    color: var(--text-secondary) !important;
+}
+
+html[data-theme="green"] .text-slate-300 {
+    color: var(--text-secondary) !important;
+}
+
+html[data-theme="green"] .text-slate-400 {
+    color: var(--text-tertiary) !important;
+}
+
+html[data-theme="green"] .text-slate-500 {
+    color: var(--text-muted) !important;
+}
+
+html[data-theme="green"] .bg-slate-950,
+html[data-theme="green"] .bg-slate-950\/50,
+html[data-theme="green"] .bg-slate-950\/60,
+html[data-theme="green"] .bg-slate-950\/20 {
+    background-color: var(--bg-input) !important;
+}
+
+html[data-theme="green"] .bg-slate-900,
+html[data-theme="green"] .bg-slate-900\/60,
+html[data-theme="green"] .bg-slate-900\/50,
+html[data-theme="green"] .bg-slate-900\/80 {
+    background-color: var(--bg-surface-solid) !important;
+}
+
+html[data-theme="green"] .bg-\[\#020617\] {
+    background-color: var(--bg-base) !important;
+}
+
+html[data-theme="green"] .border-slate-800,
+html[data-theme="green"] .border-slate-800\/60,
+html[data-theme="green"] .border-slate-800\/50,
+html[data-theme="green"] .border-slate-800\/40,
+html[data-theme="green"] .border-slate-800\/80,
+html[data-theme="green"] .border-slate-700,
+html[data-theme="green"] .border-slate-700\/80 {
+    border-color: var(--border-input) !important;
+}
+
+html[data-theme="green"] .divide-slate-800\/40 > * + * {
+    border-color: var(--border-divider) !important;
+}
+
+html[data-theme="green"] .bg-slate-950\/40 {
+    background-color: var(--bg-sidebar-footer) !important;
+}
+
+html[data-theme="green"] select option {
+    background-color: var(--select-option-bg) !important;
+    color: var(--select-option-text) !important;
+}
+
+/* Accent color overrides for green theme */
+html[data-theme="green"] .text-cyan-400 {
+    color: #34d399 !important;
+}
+
+html[data-theme="green"] .border-cyan-400 {
+    border-color: #10b981 !important;
+}
+
+html[data-theme="green"] .focus\:border-cyan-400:focus {
+    border-color: #10b981 !important;
+}
+
+/* POS Quick Cash payment selection */
+.quick-cash-option {
+    border: 1px solid #334155;
+    border-radius: .625rem;
+    background: #0f172a;
+    color: #cbd5e1;
+    padding: .55rem .75rem;
+    font-size: .75rem;
+    font-weight: 600;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.quick-cash-option:hover {
+    border-color: #818cf8;
+    background: #1e293b;
+}
+
+.quick-cash-option.quick-cash-selected,
+#quick-cash-exact.quick-cash-selected,
+#quick-cash-custom.quick-cash-selected {
+    border-color: #22d3ee;
+    background: rgb(6 182 212 / 18%);
+    color: #a5f3fc;
+}
+
+#btn-checkout-pos:disabled {
+    cursor: not-allowed;
+    opacity: .45;
+    filter: grayscale(.35);
+}
+

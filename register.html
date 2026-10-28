@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#020617">
+  <title>Buat akun baru — LagiLancar</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { min-height: 100vh; margin: 0; padding: 2rem 1rem; display: grid; place-items: center; background: #020617; color: #f1f5f9; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    .register-card { width: min(100%, 46rem); padding: clamp(1.25rem, 4vw, 2.5rem); border: 1px solid #1e293b; border-radius: 1.5rem; background: rgba(15, 23, 42, .94); box-shadow: 0 24px 80px rgba(0,0,0,.4); }
+    .register-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+    .register-field label { display:block; margin-bottom:.4rem; color:#cbd5e1; font-size:.8rem; font-weight:600; }
+    .register-field input { width:100%; box-sizing:border-box; padding:.8rem .9rem; border:1px solid #334155; border-radius:.7rem; background:#020617; color:white; font:inherit; }
+    .register-field input:focus { outline:2px solid #22d3ee; outline-offset:1px; }
+    .register-field.full { grid-column:1 / -1; }
+    #formMessage[hidden] { display:none; }
+    #formMessage { margin-top:1rem; padding:.8rem 1rem; border-radius:.75rem; }
+    #formMessage[data-type="error"] { color:#fecaca; background:#7f1d1d66; border:1px solid #ef444466; }
+    #formMessage[data-type="success"] { color:#bbf7d0; background:#14532d66; border:1px solid #22c55e66; }
+    .register-oauth { width:100%; display:flex; justify-content:center; align-items:center; gap:.7rem; padding:.8rem 1rem; border:1px solid #475569; border-radius:.75rem; background:#f8fafc; color:#0f172a; font:inherit; font-weight:700; cursor:pointer; }
+    .register-oauth:disabled { opacity:.65; cursor:wait; }
+    .register-divider { display:flex; align-items:center; gap:.8rem; margin:1.1rem 0; color:#94a3b8; font-size:.78rem; }
+    .register-divider::before,.register-divider::after { content:""; flex:1; height:1px; background:#334155; }
+    @media (max-width:600px) { .register-grid { grid-template-columns:1fr; } .register-field.full { grid-column:auto; } }
+  </style>
+</head>
+<body>
+  <main class="register-card">
+    <header style="text-align:center;margin-bottom:1.75rem">
+      <div aria-hidden="true" style="font-size:2rem">🏪</div>
+      <p style="margin:.25rem 0;color:#67e8f9;font-weight:700">LAGILANCAR</p>
+      <h1 id="registrationTitle" style="margin:.5rem 0;font-size:1.65rem">Buat akun baru</h1>
+      <p id="registrationSubtitle" style="margin:0;color:#94a3b8">Mulai kelola toko Anda dengan mudah.</p>
+    </header>
+    <button id="registerGoogleButton" type="button" class="register-oauth">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.73 7.18l7.65 5.94c4.47-4.13 7.12-10.21 7.12-17.59z"/><path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.88.93 7.55 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.86l-7.65-5.94c-2.13 1.43-4.86 2.28-8.25 2.28-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      <span>Daftar dengan Google</span>
+    </button>
+    <div id="registerGoogleHint" class="register-divider">atau daftar dengan email</div>
+    <form id="registerForm" novalidate>
+      <div class="register-grid">
+        <div class="register-field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254"></div>
+        <div class="register-field"><label for="username">Username</label><input id="username" name="username" type="text" autocomplete="username" required minlength="3" maxlength="50"></div>
+        <div class="register-field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="new-password" required minlength="8"></div>
+        <div class="register-field"><label for="confirmPassword">Konfirmasi password</label><input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required minlength="8"></div>
+        <div class="register-field owner-field"><label for="nama_toko">Nama toko</label><input id="nama_toko" name="nama_toko" required maxlength="120"></div>
+        <div class="register-field owner-field"><label for="nama_pemilik">Nama pemilik</label><input id="nama_pemilik" name="nama_pemilik" autocomplete="name" required maxlength="120"></div>
+        <div class="register-field full owner-field"><label for="alamat">Alamat toko</label><input id="alamat" name="alamat" autocomplete="street-address" required maxlength="300"></div>
+        <div class="register-field full owner-field"><label for="telepon">Nomor telepon</label><input id="telepon" name="telepon" type="tel" autocomplete="tel" required maxlength="30"></div>
+      </div>
+      <div id="formMessage" role="status" aria-live="polite" hidden></div>
+      <button id="submitButton" type="submit" style="width:100%;margin-top:1.25rem;padding:.9rem;border:0;border-radius:.75rem;background:linear-gradient(90deg,#06b6d4,#4f46e5);color:white;font:inherit;font-weight:700;cursor:pointer">Daftar Sekarang</button>
+    </form>
+    <p style="text-align:center;margin:1.25rem 0 0;color:#94a3b8">Sudah punya akun? <a href="./index.html?login=1" style="color:#67e8f9">Masuk</a></p>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="./register.js"></script>
+</body>
+</html>

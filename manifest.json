@@ -1,0 +1,21 @@
+{
+  "name": "SIM Market Enterprise",
+  "short_name": "SIMMarket",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

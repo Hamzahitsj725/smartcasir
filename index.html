@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Minimarket - Enterprise Edition</title>
+
+    <!-- PUSTAKA UTAMA (CSS & FRAMEWORK) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body class="text-slate-100 min-h-screen flex items-center justify-center bg-[#020617]"
+    style="transition: background 0.5s ease, color 0.5s ease;">
+
+    <div id="print-receipt-area"></div>
+
+    <!-- SCREEN SIGN IN -->
+    <div id="login-screen" class="w-full max-w-md p-4 smooth-transition z-50">
+        <div class="glass-panel p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-600/20 rounded-full blur-2xl"></div>
+
+            <div class="text-center mb-8 relative">
+                <div
+                    class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-indigo-600 mb-4 shadow-lg shadow-indigo-500/20">
+                    <i class="fa-solid fa-store text-2xl text-white"></i>
+                </div>
+                <h2
+                    class="text-2xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                    Masuk ke LagiLancar</h2>
+                <p class="text-sm text-slate-400 mt-1">Kelola operasional toko dalam satu tempat</p>
+            </div>
+
+            <button type="button" id="login-google-button"
+                class="relative w-full mb-4 py-3 flex justify-center items-center gap-3 rounded-xl bg-white text-slate-900 text-sm font-semibold hover:bg-slate-100 transition-colors">
+                <svg aria-hidden="true" width="19" height="19" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.73 7.18l7.65 5.94c4.47-4.13 7.12-10.21 7.12-17.59z"/><path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.88.93 7.55 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.86l-7.65-5.94c-2.13 1.43-4.86 2.28-8.25 2.28-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                <span>Masuk dengan Google</span>
+            </button>
+            <div class="flex items-center gap-3 mb-4 text-xs text-slate-500"><span class="h-px flex-1 bg-slate-700"></span>atau masuk dengan email<span class="h-px flex-1 bg-slate-700"></span></div>
+            <p id="auth-flow-message" hidden class="mb-4 rounded-lg border border-rose-500/30 bg-rose-950/40 p-3 text-xs text-rose-200" role="alert"></p>
+
+            <div class="mb-4">
+                <label for="login-role" class="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">Masuk sebagai</label>
+                <select id="login-role" class="w-full rounded-xl border border-slate-800 bg-slate-950/50 px-4 py-3 text-sm text-white focus:border-cyan-400 focus:outline-none">
+                    <option value="kasir">Kasir</option>
+                    <option value="owner">Owner</option>
+                    <option value="admin gudang">Admin Gudang</option>
+                    <option value="manajer">Manajer</option>
+                </select>
+                <p class="mt-1.5 text-[11px] text-slate-500">Role aktif mengikuti profil akun di database.</p>
+            </div>
+
+            <form id="loginForm" class="space-y-5 relative">
+                <!-- USERNAME -->
+                <div>
+                    <label
+                        class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Email/Username</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+                            <i class="fa-solid fa-user text-sm"></i>
+                        </span>
+                        <!-- Ubah bagian input Username menjadi Email -->
+                        <input type="email" id="username" required autocomplete="off"
+                            class="w-full pl-10 pr-4 py-3 bg-slate-950/50 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-cyan-400 text-white smooth-transition glow-cyan"
+                            placeholder="Masukkan email terdaftar">
+                    </div>
+                </div>
+
+                <!-- PASSWORD -->
+                <div>
+                    <label
+                        class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+                            <i class="fa-solid fa-lock text-sm"></i>
+                        </span>
+                        <input type="password" id="password" required
+                            class="w-full pl-10 pr-11 py-3 bg-slate-950/50 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-cyan-400 text-white smooth-transition glow-cyan"
+                            placeholder="••••••••">
+                        <button type="button" id="toggle-pwd"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500 hover:text-slate-300 smooth-transition">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-3 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-cyan-500/15 hover:shadow-cyan-400/25 transform hover:-translate-y-0.5 active:translate-y-0 smooth-transition mt-2">
+                    Autentikasi & Masuk <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
+                </button>
+            </form>
+            <p class="relative mt-5 text-center text-xs text-slate-400">Belum punya akun? <a href="./register.html" class="font-semibold text-cyan-300 hover:text-cyan-200">Daftar di LagiLancar</a></p>
+        </div>
+    </div>
+
+      <!-- MAIN APP SCREEN -->
+    <div id="main-app" class="relative w-full h-screen hidden smooth-transition opacity-0">
+        <div class="flex h-full w-full overflow-hidden bg-[#020617]">
+            <div id="menu-overlay"
+                class="fixed inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out z-10">
+            </div>
+
+            <!-- SIDEBAR -->
+            <aside id="sidebar" class="w-72 glass-panel border-y-0 border-l-0 flex flex-col z-20">
+                <div class="p-6 border-b border-slate-800/60 flex items-center gap-3">
+                    <button id="menu-toggle"
+                        class="p-3 rounded-2xl bg-slate-900/80 border border-slate-700 text-slate-100 shadow-lg shadow-black/20 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-400 smooth-transition">
+                        <span class="sr-only">Toggle Menu</span>
+                        <i class="fa-solid fa-bars text-sm"></i>
+                    </button>
+                    <div class="sidebar-brand flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500 to-indigo-600">
+                            <i class="fa-solid fa-vault text-white text-lg"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h1 class="font-bold text-base tracking-wide text-white truncate">SIM-Market</h1>
+                            <p class="text-[10px] text-cyan-400 font-semibold tracking-widest uppercase">v0.1 Enterprise
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-body flex-1 flex flex-col overflow-hidden">
+                    <!-- SIDEBAR MENU FILTERED BY ROLE -->
+                    <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto" id="sidebar-nav">
+                        <!-- Section Operasional Kasir -->
+                        <div id="sec-kasir" class="menu-section hidden">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-3 mb-2">
+                                Operasional Kasir</div>
+                            <button onclick="switchTab('penjualan')" id="btn-penjualan"
+                                class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium text-sm text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent smooth-transition">
+                                <i class="fa-solid fa-cart-shopping w-5 text-center"></i> Kasir
+                            </button>
+                            <button onclick="switchTab('pelanggan')" id="btn-pelanggan"
+                                class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium text-sm text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent smooth-transition mt-1.5">
+                                <i class="fa-solid fa-users w-5 text-center"></i> Kelola Pelanggan
+                            </button>
+                        </div>
+
+                        <!-- Section Inventori & Hubungan -->
+                        <div id="sec-gudang" class="menu-section hidden pt-2">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-3 mb-2">
+                                Inventori & Hubungan</div>
+                            <button onclick="switchTab('stok')" id="btn-stok"
+                                class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium text-sm text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent smooth-transition">
+                                <i class="fa-solid fa-boxes-stacked w-5 text-center"></i> Manajemen Stok
+                            </button>
+                            <button onclick="switchTab('supplier')" id="btn-supplier"
+                                class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium text-sm text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent smooth-transition">
+                                <i class="fa-solid fa-truck-field w-5 text-center"></i> Pengadaan / Supply
+                            </button>
+                        </div>
+
+                        <!-- Section Eksekutif -->
+                        <div id="sec-manajer" class="menu-section hidden pt-2">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-3 mb-2">
+                                Eksekutif</div>
+                            <button onclick="switchTab('laporan')" id="btn-laporan"
+                                class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium text-sm text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent smooth-transition">
+                                <i class="fa-solid fa-chart-line w-5 text-center"></i> Laporan Manajer
+                            </button>
+                        </div>
+
+                        <!-- Section Pengaturan (Semua Role) -->
+                        <div id="sec-setting" class="menu-section hidden pt-2">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-3 mb-2">
+                                Sistem</div>
+                            <button onclick="switchTab('setting')" id="btn-setting"
+                                class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium text-sm text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent smooth-transition">
+                                <i class="fa-solid fa-gear w-5 text-center"></i> Pengaturan / Setting
+                            </button>
+                        </div>
+                    </nav>
+
+                    <!-- USER FOOTER -->
+                    <div class="sidebar-footer p-4 border-t border-slate-800/60 bg-slate-950/40">
+                        <div
+                            class="flex items-center justify-between p-2 rounded-xl bg-slate-900/50 border border-slate-800/50">
+                            <div class="flex items-center gap-2.5">
+                                <div id="avatar-box"
+                                    class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-sm text-white">
+                                    U</div>
+                                <div>
+                                    <h4 id="user-display-name" class="text-xs font-semibold text-white">User</h4>
+                                    <p id="user-display-role"
+                                        class="text-[10px] text-slate-400 uppercase tracking-wider">Role</p>
+                                </div>
+                            </div>
+                            <button onclick="logout()"
+                                class="p-1.5 text-slate-400 hover:text-rose-400 smooth-transition"
+                                title="Keluar Sistem">
+                                <i class="fa-solid fa-power-off text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- MAIN WORKSPACE -->
+            <main class="flex-1 p-8 overflow-y-auto flex flex-col relative">
+                <header class="flex justify-between items-center mb-8 pb-4 border-b border-slate-800/40">
+                    <div>
+                        <h2 id="current-tab-title" class="text-2xl font-bold text-white tracking-tight">Memuat
+                            Halaman...</h2>
+                        <p id="current-tab-desc" class="text-xs text-slate-400 mt-1">Silakan pilih menu di panel sebelah
+                            kiri.</p>
+                    </div>
+                    <div id="network-status-badge"
+                        class="text-xs px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-400 flex items-center gap-2 smooth-transition">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> DB Server Connected
+                    </div>
+                </header>
+
+                <!-- CONTENT TAB 1: PENJUALAN -->
+                <section id="tab-penjualan" class="tab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 glass-panel p-6 rounded-2xl space-y-4 shadow-xl">
+                            <h3 class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i
+                                    class="fa-solid fa-basket-shopping text-cyan-400"></i> Pilih Produk Pelanggan</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="md:col-span-2 relative">
+                                    <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Nama Produk /
+                                        Item (Ketik untuk Mencari)</label>
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+                                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                                        </span>
+                                        <input type="text" id="pos-produk-search" oninput="filterProdukPOS()"
+                                            placeholder="Ketik nama atau SKU barang..." autocomplete="off"
+                                            class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-cyan-400 smooth-transition glow-cyan">
+                                        <input type="hidden" id="pos-produk-selected-id">
+                                    </div>
+                                    <div id="pos-produk-dropdown"
+                                        class="absolute left-0 right-0 mt-1 max-h-60 overflow-y-auto bg-slate-900 border border-slate-700/80 rounded-xl z-50 hidden shadow-2xl divide-y divide-slate-800/40">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Kuantitas /
+                                        Jumlah Barang</label>
+                                    <input type="number" id="pos-qty" min="1" value="1"
+                                        class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-cyan-400">
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-2">
+                                <div class="relative w-1/2">
+                                    <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Nama/ID Pembeli
+                                        (Opsional Member)</label>
+                                    <input type="text" id="pos-customer" placeholder="Umum / Anonim"
+                                        class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-cyan-400">
+                                    <div id="pos-customer-dropdown"
+                                        class="absolute left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-slate-900 border border-slate-700/80 rounded-xl z-50 hidden shadow-2xl divide-y divide-slate-800/40">
+                                    </div>
+                                </div>
+                                <button onclick="tambahItemKeranjang()"
+                                    class="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-sm font-semibold rounded-xl flex items-center gap-2 smooth-transition mt-5">
+                                    <i class="fa-solid fa-plus"></i> Sisipkan Item
+                                </button>
+                            </div>
+
+                            <div class="border border-slate-800/60 rounded-xl overflow-hidden mt-6 bg-slate-950/20">
+                                <table class="w-full text-sm text-left">
+                                    <thead class="bg-slate-900/60 text-slate-400 text-xs uppercase tracking-wider">
+                                        <tr>
+                                            <th class="py-3.5 px-4">Nama Produk</th>
+                                            <th class="py-3.5 px-4 text-right">Harga</th>
+                                            <th class="py-3.5 px-4 text-center">Jumlah</th>
+                                            <th class="py-3.5 px-4 text-right">Subtotal</th>
+                                            <th class="py-3.5 px-4 text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cart-table-body" class="text-slate-300 divide-y divide-slate-800/40">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div
+                            class="glass-panel p-6 rounded-2xl shadow-xl flex flex-col justify-between h-fit space-y-5">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-300 mb-3"><i
+                                        class="fa-solid fa-receipt text-indigo-400"></i> Total Ringkasan Nota</h3>
+                                <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-5 text-center mb-4">
+                                    <span
+                                        class="text-[10px] text-slate-400 font-medium uppercase tracking-widest block mb-1">Total
+                                        Pembayaran</span>
+                                    <h2 id="pos-grand-total"
+                                        class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">
+                                        Rp 0</h2>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-slate-400 text-xs mb-1.5">Metode Pembayaran</label>
+                                        <select id="pos-metode-bayar" onchange="handleMetodeBayarChange()"
+                                            class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400">
+                                            <option value="Tunai">💵 Tunai (Cash)</option>
+                                            <option value="QRIS">📱 QRIS (Digital / QR)</option>
+                                            <option value="Debit">💳 Kartu Debit</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="container-nominal-bayar">
+                                        <label id="label-nominal-bayar"
+                                            class="block text-slate-400 text-xs mb-1">Nominal Uang Tunai Pembeli
+                                            (Rp)</label>
+                                        <input type="text" inputmode="numeric" autocomplete="off" id="pos-bayar" placeholder="Masukkan jumlah uang tunai"
+                                            oninput="handleInputBayar()"
+                                            class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400">
+                                        <div id="quick-cash-controls" class="mt-3 space-y-3">
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <button type="button" id="quick-cash-exact" onclick="pilihUangPas()"
+                                                    class="px-3 py-2 rounded-lg border border-cyan-500/40 bg-cyan-500/10 text-cyan-200 text-xs font-semibold hover:bg-cyan-500/20">
+                                                    Uang Pas
+                                                </button>
+                                                <button type="button" id="quick-cash-custom" onclick="pilihCustomCash()"
+                                                    class="px-3 py-2 rounded-lg border border-slate-700 bg-slate-900 text-slate-300 text-xs font-semibold hover:border-indigo-400">
+                                                    Custom
+                                                </button>
+                                            </div>
+                                            <div id="quick-cash-denominations" class="grid grid-cols-2 gap-2">
+                                                <button type="button" data-cash-value="20000" onclick="pilihNominalCash(20000)" class="quick-cash-option">Rp20.000</button>
+                                                <button type="button" data-cash-value="50000" onclick="pilihNominalCash(50000)" class="quick-cash-option">Rp50.000</button>
+                                                <button type="button" data-cash-value="100000" onclick="pilihNominalCash(100000)" class="quick-cash-option">Rp100.000</button>
+                                                <button type="button" data-cash-value="200000" onclick="pilihNominalCash(200000)" class="quick-cash-option">Rp200.000</button>
+                                            </div>
+                                            <p id="pos-payment-feedback" class="min-h-5 text-xs text-slate-400" aria-live="polite">Masukkan nominal uang diterima.</p>
+                                        </div>
+                                    </div>
+
+                                    <div id="container-ref-bayar" class="hidden">
+                                        <label class="block text-slate-400 text-xs mb-1">Nomor Referensi / Trace ID / No
+                                            Kartu</label>
+                                        <input type="text" id="pos-ref" placeholder="Contoh: TRX-109283"
+                                            class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400">
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="btn-checkout-pos" onclick="prosesCheckoutPOS()" disabled
+                                class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-emerald-500/10 smooth-transition">
+                                <i class="fa-solid fa-print mr-2"></i> Eksekusi & Cetak Struk
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTENT TAB 2: PELANGGAN (PROSES 2.0) -->
+                <section id="tab-pelanggan" class="tab-content hidden space-y-6">
+                    <div class="glass-panel p-6 rounded-2xl shadow-xl">
+                        <div class="flex justify-between items-center mb-6 border-b border-slate-800/40 pb-3">
+                            <h3 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
+                                <i class="fa-solid fa-address-card text-emerald-400"></i> Database Keanggotaan Pelanggan
+                                (Proses 2.0)
+                            </h3>
+                            <span
+                                class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-md font-mono border border-emerald-500/30">MODULE
+                                ENGINE v2.0 active</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="md:col-span-1 border-r border-slate-800/40 pr-6 space-y-4">
+                                <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Registrasi
+                                    Member Baru</h4>
+                                <div class="space-y-3">
+                                    <input type="text" id="cust-nama" placeholder="Nama Pelanggan"
+                                        class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-400">
+                                    <input type="text" id="cust-kontak" placeholder="No. Telepon / WA"
+                                        class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-400">
+                                    <button onclick="tambahMemberBaru()"
+                                        class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl smooth-transition">Simpan
+                                        Kartu Member</button>
+                                </div>
+                            </div>
+                            <div class="md:col-span-2">
+                                <div class="border border-slate-800/60 rounded-xl overflow-hidden bg-slate-950/20">
+                                    <table class="w-full text-sm text-left">
+                                        <thead class="bg-slate-900/60 text-slate-400 text-xs uppercase tracking-wider">
+                                            <tr>
+                                                <th class="py-3.5 px-4">ID Member</th>
+                                                <th class="py-3.5 px-4">Nama Lengkap</th>
+                                                <th class="py-3.5 px-4">Kontak Telepon</th>
+                                                <th class="py-3.5 px-4 text-center">Poin Belanja</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="member-table-body"
+                                            class="text-slate-300 divide-y divide-slate-800/40"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTENT TAB 3: STOK -->
+                <section id="tab-stok" class="tab-content hidden space-y-6">
+                    <div class="glass-panel p-6 rounded-2xl shadow-xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i
+                                    class="fa-solid fa-box text-cyan-400"></i> Monitor Gudang & Stok Opname</h3>
+                            <button id="btn-buka-modal-produk" onclick="bukaModalTambahProduk()"
+                                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl flex items-center gap-2 smooth-transition shadow-lg shadow-indigo-600/20">
+                                <i class="fa-solid fa-square-plus"></i> Register SKU Baru
+                            </button>
+                        </div>
+                        <div class="border border-slate-800/60 rounded-xl overflow-hidden bg-slate-950/20">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-900/60 text-slate-400 text-xs uppercase tracking-wider">
+                                    <tr>
+                                        <th class="py-3.5 px-4">Kode SKU</th>
+                                        <th class="py-3.5 px-4">Nama Produk</th>
+                                        <th class="py-3.5 px-4">Kategori</th>
+                                        <th class="py-3.5 px-4 text-right">Harga Retail</th>
+                                        <th class="py-3.5 px-4 text-center">Kuantitas Stok</th>
+                                        <th class="py-3.5 px-4 text-center">Status</th>
+                                        <th class="py-3.5 px-4 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stok-table-body" class="text-slate-300 divide-y divide-slate-800/40"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTENT TAB 4: SUPPLIER -->
+                <section id="tab-supplier" class="tab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 glass-panel p-6 rounded-2xl shadow-xl">
+                            <h3 class="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-truck-moving text-amber-400"></i> Rekanan Distributor Terdaftar
+                            </h3>
+                            <form id="supplier-form" class="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <label class="block text-xs font-medium text-slate-400">Nama supplier
+                                    <input id="supplier-nama" required minlength="2" maxlength="120" autocomplete="organization"
+                                        class="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none">
+                                </label>
+                                <label class="block text-xs font-medium text-slate-400">Kategori
+                                    <input id="supplier-kategori" maxlength="80" value="Distributor"
+                                        class="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none">
+                                </label>
+                                <label class="block text-xs font-medium text-slate-400">Kontak supplier
+                                    <input id="supplier-kontak" required minlength="5" maxlength="120" autocomplete="tel"
+                                        class="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none">
+                                </label>
+                                <button id="supplier-submit" type="submit"
+                                    class="self-end rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-amber-400">
+                                    <i class="fa-solid fa-plus mr-1"></i> Tambah supplier
+                                </button>
+                            </form>
+                            <div class="border border-slate-800/60 rounded-xl overflow-hidden bg-slate-950/20">
+                                <table class="w-full text-sm text-left">
+                                    <thead class="bg-slate-900/60 text-slate-400 text-xs uppercase tracking-wider">
+                                        <tr>
+                                            <th class="py-3.5 px-4">ID Vendor</th>
+                                            <th class="py-3.5 px-4">Nama Perusahaan</th>
+                                            <th class="py-3.5 px-4">Kategori Supply</th>
+                                            <th class="py-3.5 px-4">Kontak</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="supplier-table-body" class="text-slate-300 divide-y divide-slate-800/40">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-6 rounded-2xl shadow-xl space-y-4">
+                            <div class="border-b border-slate-800/60 pb-2">
+                                <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                                    <i class="fa-solid fa-boxes-packing text-amber-400 animate-pulse"></i> Form Restock
+                                    Barang Masuk
+                                </h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Tambah saldo kuantitas produk melalui
+                                    supplier resmi.</p>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Pilih Item
+                                    Produk</label>
+                                <select id="restock-produk"
+                                    class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-amber-400 smooth-transition glow-amber"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Asal Vendor
+                                    Supplier</label>
+                                <select id="restock-supplier"
+                                    class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-amber-400 smooth-transition glow-amber"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Kuantitas Tambahan
+                                    Masuk (Qty)</label>
+                                <input type="number" id="restock-qty" min="1" value="50"
+                                    class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-amber-400 smooth-transition glow-amber">
+                            </div>
+                            <button onclick="eksekusiRestockBarang()"
+                                class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 text-sm font-bold rounded-xl shadow-lg shadow-amber-500/10 transform hover:-translate-y-0.5 active:translate-y-0 smooth-transition pt-3">
+                                <i class="fa-solid fa-arrow-down-wide-short mr-2"></i> Konfirmasi Pasokan Masuk
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTENT TAB 5: LAPORAN MANAJER -->
+                <section id="tab-laporan" class="tab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="glass-panel p-5 rounded-2xl flex items-center justify-between shadow-lg">
+                            <div>
+                                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Pendapatan Kasir
+                                    Hari Ini</p>
+                                <h3 id="rep-total-duit" class="text-2xl font-bold text-emerald-400 mt-1">Rp 0</h3>
+                            </div>
+                            <div
+                                class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-lg">
+                                <i class="fa-solid fa-money-bill-trend-up"></i>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl flex items-center justify-between shadow-lg">
+                            <div>
+                                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Transaksi
+                                    Selesai</p>
+                                <h3 id="rep-total-nota" class="text-2xl font-bold text-cyan-400 mt-1">0 Nota</h3>
+                            </div>
+                            <div
+                                class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 text-lg">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl shadow-xl">
+                        <h3 class="text-sm font-semibold text-slate-300 mb-4"><i
+                                class="fa-solid fa-clock-rotate-left text-indigo-400"></i> Berkas Histori Agregasi Log
+                            Transaksi Penjualan</h3>
+                        <div class="border border-slate-800/60 rounded-xl overflow-hidden bg-slate-950/20">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-900/60 text-slate-400 text-xs uppercase tracking-wider">
+                                    <tr>
+                                        <th class="py-3.5 px-4">No. Struk Nota</th>
+                                        <th class="py-3.5 px-4">Waktu Transaksi</th>
+                                        <th class="py-3.5 px-4">Nama Pembeli</th>
+                                        <th class="py-3.5 px-4">Rincian Item Belanja</th>
+                                        <th class="py-3.5 px-4 text-right">Total Akhir</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="laporan-table-body" class="text-slate-300 divide-y divide-slate-800/40">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTENT TAB 6: SETTING / PENGATURAN -->
+                <section id="tab-setting" class="tab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                        <div id="owner-invite-panel" class="setting-card animate-fade-in-up hidden">
+                            <div class="setting-card-header">
+                                <div class="icon-box bg-gradient-to-br from-cyan-500 to-blue-600"><i class="fa-solid fa-user-plus"></i></div>
+                                <div><h3 class="text-sm font-bold" style="color:var(--text-heading)">Undang Pegawai</h3>
+                                    <p class="text-[11px]" style="color:var(--text-muted)">Undangan berlaku 7 hari dan hanya berlaku untuk email yang dipilih.</p></div>
+                            </div>
+                            <form id="employeeInviteForm" class="space-y-3">
+                                <label class="block text-xs font-semibold" for="invite-email">Email pegawai</label>
+                                <input id="invite-email" type="email" required autocomplete="email" class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white">
+                                <label class="block text-xs font-semibold" for="invite-role">Role pegawai</label>
+                                <select id="invite-role" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white">
+                                    <option value="kasir">Kasir</option><option value="admin gudang">Admin Gudang</option><option value="manajer">Manajer</option>
+                                </select>
+                                <button id="invite-submit" type="submit" class="w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-xl">Buat tautan undangan</button>
+                                <p id="invite-message" role="status" aria-live="polite" class="text-xs break-all"></p>
+                            </form>
+                        </div>
+
+                        <!-- CARD 1: MANAJEMEN AKUN -->
+                        <div class="setting-card animate-fade-in-up">
+                            <div class="setting-card-header">
+                                <div
+                                    class="icon-box bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/20">
+                                    <i class="fa-solid fa-user-shield"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold" style="color: var(--text-heading);">Manajemen Akun
+                                    </h3>
+                                    <p class="text-[11px]" style="color: var(--text-muted);">Informasi profil & sesi
+                                        aktif saat ini</p>
+                                </div>
+                            </div>
+                            <div class="space-y-0">
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-user mr-1.5"></i>Nama Pengguna</span>
+                                    <span class="value" id="setting-username">Memuat...</span>
+                                </div>
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-envelope mr-1.5"></i>Email Login</span>
+                                    <span class="value" id="setting-email">Memuat...</span>
+                                </div>
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-briefcase mr-1.5"></i>Jabatan /
+                                        Role</span>
+                                    <span class="value" id="setting-role">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-indigo-500/15 text-indigo-400 border border-indigo-500/20">Memuat...</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 mt-5">
+                                <button
+                                    onclick="alert('Fitur ubah sandi dalam pengembangan. Hubungi admin untuk reset password.')"
+                                    class="flex-1 py-2.5 bg-slate-900/80 border border-slate-800 hover:border-indigo-500/40 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 smooth-transition"
+                                    style="color: var(--text-tertiary);">
+                                    <i class="fa-solid fa-key"></i> Ubah Sandi
+                                </button>
+                                <button onclick="logout()"
+                                    class="flex-1 py-2.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 smooth-transition">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Keluar Sesi
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="setting-card animate-fade-in-up lg:col-span-2">
+                            <div class="setting-card-header">
+                                <div class="icon-box bg-gradient-to-br from-cyan-500 to-indigo-600"><i class="fa-solid fa-store"></i></div>
+                                <div>
+                                    <h3 class="text-sm font-bold" style="color:var(--text-heading)">Profil dan Informasi Toko</h3>
+                                    <p class="text-[11px]" style="color:var(--text-muted)">Lengkapi atau perbarui data akun dan toko. Data toko hanya dapat diubah oleh owner.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CARD 2: PUSAT LAYANAN / BANTUAN -->
+                        <div class="setting-card animate-fade-in-up" style="animation-delay: 0.08s;">
+                            <div class="setting-card-header">
+                                <div
+                                    class="icon-box bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20">
+                                    <i class="fa-solid fa-headset"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold" style="color: var(--text-heading);">Pusat Layanan &
+                                        Bantuan</h3>
+                                    <p class="text-[11px]" style="color: var(--text-muted);">Kontak dukungan teknis &
+                                        panduan penggunaan</p>
+                                </div>
+                            </div>
+                            <div class="space-y-0">
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-building mr-1.5"></i>Developer</span>
+                                    <span class="value">IT Division — ITS-NU Jambi</span>
+                                </div>
+                                <div class="setting-info-row">
+                                    <span class="label"><i
+                                            class="fa-brands fa-whatsapp mr-1.5 text-emerald-400"></i>WhatsApp</span>
+                                    <span class="value">
+                                        <a href="https://wa.me/6281234567890" target="_blank"
+                                            class="text-emerald-400 hover:text-emerald-300 smooth-transition underline underline-offset-2">
+                                            +62 812-3456-7890
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-envelope mr-1.5"></i>Email Support</span>
+                                    <span class="value">support@sim-market.id</span>
+                                </div>
+                            </div>
+                            <div class="mt-5 p-3 rounded-xl border"
+                                style="background: var(--bg-input-deep); border-color: var(--border-subtle);">
+                                <div class="flex items-start gap-2">
+                                    <i class="fa-solid fa-circle-info text-sm mt-0.5"
+                                        style="color: var(--accent-gradient-from);"></i>
+                                    <p class="text-[11px] leading-relaxed" style="color: var(--text-tertiary);">
+                                        <strong>Panduan Singkat:</strong> Gunakan menu sidebar untuk berpindah antar
+                                        modul.
+                                        Pastikan koneksi internet stabil saat melakukan transaksi. Sistem mendukung mode
+                                        offline
+                                        untuk operasi kasir darurat.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CARD 3: KUSTOMISASI TEMA WARNA -->
+                        <div class="setting-card animate-fade-in-up" style="animation-delay: 0.16s;">
+                            <div class="setting-card-header">
+                                <div
+                                    class="icon-box bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/20">
+                                    <i class="fa-solid fa-palette"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold" style="color: var(--text-heading);">Kustomisasi Tema
+                                        Warna</h3>
+                                    <p class="text-[11px]" style="color: var(--text-muted);">Pilih skema warna antarmuka
+                                        yang diinginkan</p>
+                                </div>
+                            </div>
+                            <div class="theme-picker-grid">
+                                <!-- Light Theme -->
+                                <button class="theme-btn active" data-theme-value="light"
+                                    onclick="ubahTemaAplikasi('light')">
+                                    <span class="check-badge bg-gradient-to-br from-cyan-400 to-indigo-500"><i
+                                            class="fa-solid fa-check"></i></span>
+                                    <div class="theme-preview theme-preview-light"></div>
+                                    <span class="theme-label">☀️ Putih</span>
+                                    <span class="text-[9px] font-medium" style="color: var(--text-muted);">Clean
+                                        Modern</span>
+                                </button>
+                                <!-- Green Theme -->
+                                <button class="theme-btn" data-theme-value="green" onclick="ubahTemaAplikasi('green')">
+                                    <span class="check-badge bg-gradient-to-br from-emerald-400 to-teal-500"><i
+                                            class="fa-solid fa-check"></i></span>
+                                    <div class="theme-preview theme-preview-green"></div>
+                                    <span class="theme-label">🌿 Hijau</span>
+                                    <span class="text-[9px] font-medium" style="color: var(--text-muted);">Emerald
+                                        Eco</span>
+                                </button>
+                                <!-- Dark Theme -->
+                                <button class="theme-btn" data-theme-value="dark" onclick="ubahTemaAplikasi('dark')">
+                                    <span class="check-badge bg-gradient-to-br from-violet-400 to-indigo-500"><i
+                                            class="fa-solid fa-check"></i></span>
+                                    <div class="theme-preview theme-preview-dark"></div>
+                                    <span class="theme-label">🌙 Hitam</span>
+                                    <span class="text-[9px] font-medium" style="color: var(--text-muted);">Dark
+                                        Enterprise</span>
+                                </button>
+                            </div>
+                            <p class="text-[10px] mt-4 flex items-center gap-1.5" style="color: var(--text-muted);">
+                                <i class="fa-solid fa-floppy-disk"></i> Preferensi tema otomatis tersimpan di perangkat
+                                ini.
+                            </p>
+                        </div>
+
+                        <!-- CARD 4: INFORMASI VERSI -->
+                        <div class="setting-card animate-fade-in-up" style="animation-delay: 0.24s;">
+                            <div class="setting-card-header">
+                                <div
+                                    class="icon-box bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/20">
+                                    <i class="fa-solid fa-microchip"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold" style="color: var(--text-heading);">Informasi Versi
+                                        Aplikasi</h3>
+                                    <p class="text-[11px]" style="color: var(--text-muted);">Detail build & metadata
+                                        sistem</p>
+                                </div>
+                            </div>
+                            <div class="space-y-0">
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-tag mr-1.5"></i>Versi</span>
+                                    <span class="value">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/15 font-mono">
+                                            v0.1.0 Stable Build
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-cube mr-1.5"></i>Nama Produk</span>
+                                    <span class="value">SIM-Market Enterprise</span>
+                                </div>
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-code-branch mr-1.5"></i>Channel</span>
+                                    <span class="value">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/15">STABLE</span>
+                                    </span>
+                                </div>
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-layer-group mr-1.5"></i>Stack</span>
+                                    <span class="value text-[11px]">Supabase · Tailwind · PWA · ES Modules</span>
+                                </div>
+                                <div class="setting-info-row">
+                                    <span class="label"><i class="fa-solid fa-shield-halved mr-1.5"></i>Lisensi</span>
+                                    <span class="value">Proprietary — ITS-NU Jambi</span>
+                                </div>
+                            </div>
+                            <div class="mt-5 text-center py-3 rounded-xl border"
+                                style="background: var(--bg-input-deep); border-color: var(--border-subtle);">
+                                <p class="text-[10px] font-mono tracking-wider" style="color: var(--text-muted);">© 2026
+                                    SIM-Market Enterprise · All Rights Reserved</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <!-- Watermark Hak Akses Sistem -->
+    <div
+        class="fixed bottom-4 right-4 z-[9999] flex items-center gap-1.5 rounded-lg app-watermark backdrop-blur-sm px-2.5 py-1 pointer-events-none select-none">
+        <span class="text-xs">🔐</span>
+        <span class="font-mono text-[10px] tracking-wider font-medium"
+            style="color: var(--watermark-text);">@prv.syarif.edt</span>
+    </div>
+
+
+    <!-- MODAL REGISTRASI PRODUK SKU BARU (PENGGANTI PROMPT) -->
+    <div id="modal-tambah-produk"
+        class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-200 hidden opacity-0">
+        <div
+            class="modal-box w-full max-w-lg glass-panel p-6 rounded-2xl shadow-2xl border border-slate-800 relative transition-transform duration-200 scale-95 overflow-hidden">
+            <!-- Glow accents -->
+            <div
+                class="absolute -top-12 -right-12 w-28 h-28 bg-indigo-600/20 rounded-full blur-2xl pointer-events-none">
+            </div>
+            <div
+                class="absolute -bottom-12 -left-12 w-28 h-28 bg-cyan-600/20 rounded-full blur-2xl pointer-events-none">
+            </div>
+
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-5 relative">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+                        <i class="fa-solid fa-box-open text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 id="modal-produk-title" class="text-base font-bold text-white tracking-wide">Registrasi SKU Produk Baru</h3>
+                        <p class="text-xs text-slate-400">Tambahkan item ke katalog sediaan inventori gudang</p>
+                    </div>
+                </div>
+                <button id="btn-tutup-modal-produk" onclick="tutupModalTambahProduk()"
+                    class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 smooth-transition"
+                    title="Tutup Modal">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <form id="form-tambah-produk" onsubmit="event.preventDefault(); simpanProdukBaruModal();"
+                class="space-y-4 relative">
+                <!-- KODE SKU -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Kode SKU
+                        Produk</label>
+                    <div class="relative">
+                        <span
+                            class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 font-mono text-xs">
+                            <i class="fa-solid fa-barcode"></i>
+                        </span>
+                        <input type="text" id="modal-prod-sku" required
+                            class="form-input-highlight w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono font-bold text-cyan-400 focus:outline-none focus:border-cyan-400 smooth-transition glow-cyan"
+                            placeholder="Contoh: BRG-001">
+                    </div>
+                    <span id="error-prod-sku" class="form-error-msg text-[11px] text-rose-400 block mt-1"></span>
+                </div>
+
+                <!-- NAMA PRODUK -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Nama
+                        Produk Lengkap</label>
+                    <input type="text" id="modal-prod-nama" required
+                        class="form-input-highlight w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-400 smooth-transition glow-cyan"
+                        placeholder="Contoh: Susu UHT Cokelat 250ml">
+                    <span id="error-prod-nama" class="form-error-msg text-[11px] text-rose-400 block mt-1"></span>
+                </div>
+
+                <!-- KATEGORI -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Kategori
+                        Produk</label>
+                    <select id="modal-prod-kategori"
+                        class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-cyan-400 smooth-transition cursor-pointer">
+                        <option value="Makanan">Makanan</option>
+                        <option value="Minuman">Minuman</option>
+                        <option value="Sembako">Sembako & Bahan Pokok</option>
+                        <option value="Kebersihan">Kebersihan & Rumah Tangga</option>
+                        <option value="Perlengkapan">Perlengkapan Pribadi</option>
+                        <option value="Kesehatan">Kesehatan & Obat</option>
+                        <option value="Scan">Scan Barcode Khusus</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+
+                <!-- HARGA & STOK AWAL -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Harga
+                            Jual Satuan (Rp)</label>
+                        <div class="relative">
+                            <span
+                                class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 text-xs font-semibold">Rp</span>
+                            <input type="number" id="modal-prod-harga" min="1" step="50" required
+                                class="form-input-highlight w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-emerald-400 font-bold focus:outline-none focus:border-cyan-400 smooth-transition"
+                                placeholder="15000">
+                        </div>
+                        <span id="error-prod-harga" class="form-error-msg text-[11px] text-rose-400 block mt-1"></span>
+                    </div>
+                    <div>
+                        <label
+                            class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Kuantitas
+                            Awal Gudang</label>
+                        <div class="relative">
+                            <input type="number" id="modal-prod-stok" min="0" value="50" required
+                                class="form-input-highlight w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 font-bold focus:outline-none focus:border-cyan-400 smooth-transition"
+                                placeholder="50">
+                            <span
+                                class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500 text-xs">Pcs</span>
+                        </div>
+                        <span id="error-prod-stok" class="form-error-msg text-[11px] text-rose-400 block mt-1"></span>
+                    </div>
+                </div>
+
+                <!-- TOMBOL AKSI -->
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800/80 mt-6">
+                    <button type="button" id="btn-batal-modal-produk" onclick="tutupModalTambahProduk()"
+                        class="px-4 py-2.5 rounded-xl border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-900 text-xs font-semibold smooth-transition">
+                        Batal
+                    </button>
+                    <button type="submit" id="btn-submit-modal-produk"
+                        class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white text-xs font-semibold shadow-lg shadow-cyan-500/15 smooth-transition flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan Produk SKU
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed top-5 right-5 z-[99999] flex flex-col gap-2.5 max-w-sm pointer-events-none">
+    </div>
+
+    <!-- SCRIPT APPLICATION -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
