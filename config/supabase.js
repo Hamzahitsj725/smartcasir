@@ -16,12 +16,12 @@ const getEnvVar = (key, fallback = "") => {
 
 export const SUPABASE_URL = getEnvVar(
     "VITE_SUPABASE_URL",
-    getEnvVar("SUPABASE_URL", "https://brarwmuhcszekrellnkk.supabase.co")
+    getEnvVar("SUPABASE_URL", "https://vbxbwwngrjbjljgcumcl.supabase.co")
 );
 
 export const SUPABASE_ANON_KEY = getEnvVar(
     "VITE_SUPABASE_ANON_KEY",
-    getEnvVar("SUPABASE_ANON_KEY", "sb_publishable_O4TWch71_Vtcdagi-YFBpQ_YzggF6OD")
+    getEnvVar("SUPABASE_ANON_KEY", "sb_publishable_W-LuxiwjSIrCgbcRVsnHGw_gcB66SPQ")
 );
 
 // This static app does not load .env files in the browser. Keep the local
